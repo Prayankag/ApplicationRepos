@@ -85,8 +85,9 @@ jobs:
           app-name: ${{ github.event.inputs.app-name }}
           slot-name: 'Development'
           package: '*.jar'  # Path to the generated JAR file
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile_a924dda677174242986fe24120677f9c }}
-
+          #publish-profile: ${{ secrets.AzureAppService_PublishProfile_a924dda677174242986fe24120677f9c }}
+          publish-profile: ${{ secrets.AzureAppService_PublishProfile_33ac0071b75a41149831c060e302057b }}
+          
       - name: Validate Deployment (Dev)
         run: |
           curl -s --head --request GET https://$${{ github.event.inputs.app-name }}-dev.azurewebsites.net/ || exit 1
