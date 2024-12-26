@@ -15,7 +15,7 @@ on:
 
 permissions:
   id-token: write  # Grants permission to request an ID token for Azure login
-  contents: read   # Grants permission to read the repository contents
+  contents: read   # Grants permission to read the repository contentss
 
 jobs:
   build-springboot-app:
