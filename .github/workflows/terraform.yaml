@@ -109,7 +109,7 @@ jobs:
           ENV_TFVARS="terraform/terraform.tfvars"  # Default path if no environment is provided
           echo "No environment provided, using default tfvars file: ${ENV_TFVARS}"
         else
-          ENV_TFVARS="environments/${{ github.event.inputs.environment }}/terraform.tfvars"
+          ENV_TFVARS="terraform/environments/${{ github.event.inputs.environment }}/terraform.tfvars"
           echo "Using environment-specific tfvars file: ${ENV_TFVARS}"
         fi
 
@@ -124,7 +124,7 @@ jobs:
           ENV_TFVARS="terraform/terraform.tfvars"  # Default path if no environment is provided
           echo "No environment provided, using default tfvars file: ${ENV_TFVARS}"
         else
-          ENV_TFVARS="environments/${{ github.event.inputs.environment }}/terraform.tfvars"
+          ENV_TFVARS="terraform/environments/${{ github.event.inputs.environment }}/terraform.tfvars"
           echo "Using environment-specific tfvars file: ${ENV_TFVARS}"
         fi
 
