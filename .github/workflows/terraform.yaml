@@ -99,7 +99,7 @@ jobs:
       run: |
         echo "Running Terraform Plan with environment-specific tfvars..."
         if [ -z "${{ github.event.inputs.environment }}" ]; then
-          ENV_TFVARS="environments/default/terraform.tfvars"  # Default path if no environment is provided
+          ENV_TFVARS="environments/terraform.tfvars"  # Default path if no environment is provided
           echo "No environment provided, using default tfvars file: ${ENV_TFVARS}"
         else
           ENV_TFVARS="environments/${{ github.event.inputs.environment }}/terraform.tfvars"
