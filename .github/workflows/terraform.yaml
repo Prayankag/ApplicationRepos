@@ -101,11 +101,28 @@ jobs:
         go mod tidy
         go test -v
 
+    # # Step 9: Terraform Plan with environment-specific variables
+    # - name: Terraform Plan
+    #   run: |
+    #     echo "Running Terraform Plan with environment-specific tfvars..."
+    #     terraform -chdir=${{ env.TF_WORKING_DIR }} plan -out=tfplan -var-file=${{ env.TF_WORKING_DIR }}/../../environments/${{ github.event.inputs.environment }}/terraform.tfvars
     # Step 9: Terraform Plan with environment-specific variables
     - name: Terraform Plan
       run: |
         echo "Running Terraform Plan with environment-specific tfvars..."
-        terraform -chdir=${{ env.TF_WORKING_DIR }} plan -out=tfplan -var-file=${{ env.TF_WORKING_DIR }}/../../environments/${{ github.event.inputs.environment }}/terraform.tfvars
+        
+        # Check if environment is provided
+        if [ -z "${{ github.event.inputs.environment }}" ]; then
+          echo "No environment provided, using default tfvars file"
+          ENV_TFVARS="environments/default/terraform.tfvars"  # Use default if no environment
+        else
+          ENV_TFVARS="environments/${{ github.event.inputs.environment }}/terraform.tfvars"
+        fi
+        
+        echo "Using tfvars file: ${ENV_TFVARS}"
+        
+        # Run the terraform plan with the correct tfvars file
+        terraform -chdir=${{ env.TF_WORKING_DIR }} plan -out=tfplan -var-file=${{ env.TF_WORKING_DIR }}/${ENV_TFVARS}
 
     # Step 10: Apply Terraform Plan (auto-approve for CI/CD)
     - name: Terraform Apply
