@@ -32,14 +32,19 @@ jobs:
         echo "Listing the contents of the working directory..."
         ls -al $GITHUB_WORKSPACE
 
-    # Step 3: Set up Azure CLI
-    - name: Set up Azure CLI
-      uses: azure/setup-azure-cli@v1  # Correct action for setting up Azure CLI
+    # # Step 3: Set up Azure CLI
+    # - name: Set up Azure CLI
+    #   uses: azure/setup-azure-cli@v1  # Correct action for setting up Azure CLI
+    # Setup Azure Login using Service Principal
+    - name: Setup Azure Login using Service Principal
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}  # Service Principal credentials in JSON format
 
-    - name: Login to Azure
-      run: |
-        echo "Logging in to Azure..."
-        az login --service-principal -u "${{ secrets.AZURE_CLIENT_ID }}" -p "${{ secrets.AZURE_CLIENT_SECRET }}" --tenant "${{ secrets.AZURE_TENANT_ID }}"
+    # - name: Login to Azure
+    #   run: |
+    #     echo "Logging in to Azure..."
+    #     az login --service-principal -u "${{ secrets.AZURE_CLIENT_ID }}" -p "${{ secrets.AZURE_CLIENT_SECRET }}" --tenant "${{ secrets.AZURE_TENANT_ID }}"
 
     # Step 4: Set up Go
     - name: Set up Go ${{ env.GO_VERSION }}
