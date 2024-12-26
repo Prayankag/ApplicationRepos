@@ -63,25 +63,32 @@ jobs:
     - name: Terraform Init
       run: |
         echo "Initializing Terraform..."
-        terraform -chdir=${{ env.TF_WORKING_DIR }} init -upgrade
+        #terraform -chdir=${{ env.TF_WORKING_DIR }} init -upgrade
+        cd ${{ github.workspace }}/terraform/modules/webapp  # Navigate to the correct directory
+        terraform init -upgrade
 
     # Step 7: Validate Terraform configuration
     - name: Terraform Validate
       run: |
         echo "Validating Terraform configuration..."
-        terraform -chdir=${{ env.TF_WORKING_DIR }} validate
+        #terraform -chdir=${{ env.TF_WORKING_DIR }} validate
+        cd ${{ github.workspace }}/terraform/modules/webapp  # Navigate to the correct directory
+        terraform validate
 
     # Step 8: Run Unit Tests using Go with Terratest
     - name: Run Unit Tests with Terratest
       run: |
         echo "Running Unit Tests with Terratest"
-        cd ${{ env.TF_WORKING_DIR }}
-        export TF_VAR_ENV="${{ github.event.inputs.environment }}"  # Set environment-specific variable
+        # cd ${{ env.TF_WORKING_DIR }}
+        # export TF_VAR_ENV="${{ github.event.inputs.environment }}"  # Set environment-specific variable
+        cd ${{ github.workspace }}/terraform/modules/webapp  # Navigate to the correct directory
+        export TF_VAR_ENV="${{ github.event.inputs.environment }}"
 
         # Initialize Go module if not already initialized
         if [ ! -f "go.mod" ]; then
           echo "Initializing Go module..."
-          go mod init $(basename ${{ env.TF_WORKING_DIR }})
+          #go mod init $(basename ${{ env.TF_WORKING_DIR }})
+          go mod init $(basename ${{ github.workspace }}/terraform/modules/webapp)
         else
           echo "go.mod already exists, skipping initialization."
         fi
@@ -122,26 +129,32 @@ jobs:
         echo "Using tfvars file: ${ENV_TFVARS}"
         
         # Run the terraform plan with the correct tfvars file
-        terraform -chdir=${{ env.TF_WORKING_DIR }} plan -out=tfplan -var-file=${{ env.TF_WORKING_DIR }}/${ENV_TFVARS}
+        cd ${{ github.workspace }}/terraform/modules/webapp  # Navigate to the correct directory
+        terraform plan -out=tfplan -var-file=${{ github.workspace }}/${ENV_TFVARS}
+        #terraform -chdir=${{ env.TF_WORKING_DIR }} plan -out=tfplan -var-file=${{ env.TF_WORKING_DIR }}/${ENV_TFVARS}
 
-    # Step 10: Apply Terraform Plan (auto-approve for CI/CD)
+    # Step 10: Terraform Apply (auto-approve for CI/CD)
     - name: Terraform Apply
       run: |
         echo "Applying Terraform Plan..."
-        # Use default tfvars path if no environment is set
+
+        # Check if environment is provided
         if [ -z "${{ github.event.inputs.environment }}" ]; then
-          echo "Environment is not set, using default tfvars file"
-          ENV_TFVARS="environments/default/terraform.tfvars"  # Default path if no environment is provided
+          echo "No environment provided, using default tfvars file"
+          ENV_TFVARS="environments/default/terraform.tfvars"  # Use default if no environment
         else
           ENV_TFVARS="environments/${{ github.event.inputs.environment }}/terraform.tfvars"
         fi
-    
+        
         echo "Using tfvars file: ${ENV_TFVARS}"
-    
-        terraform -chdir=${{ env.TF_WORKING_DIR }} apply -auto-approve -var-file=${{ env.TF_WORKING_DIR }}/${ENV_TFVARS}
+
+        # Apply Terraform Plan with the correct tfvars file
+        cd ${{ github.workspace }}/terraform/modules/webapp  # Ensure we're in the correct working directory
+        terraform apply -auto-approve -var-file=${{ github.workspace }}/${ENV_TFVARS}
 
     # Step 11: Remove terraform.lock file after apply
     - name: Remove terraform.lock.hcl
       run: |
         echo "Removing terraform.lock.hcl after applying..."
-        rm -f ${{ env.TF_WORKING_DIR }}/terraform.lock.hcl
+        cd ${{ github.workspace }}/terraform/modules/webapp  # Navigate to the correct directory
+        rm -f terraform.lock.hcl
