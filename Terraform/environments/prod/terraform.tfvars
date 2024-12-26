@@ -4,4 +4,3 @@ app_service_plan_name = "prod-plan"
 web_app_name        = "prod-web-app"
 sku_size            = "B1"
 os_type             = "Windows"
-

@@ -46,4 +46,3 @@ func TestTerraformWebAppPlan(t *testing.T) {
     //planOutput := InitAndPlanTerraform(t, terraformOptions)
     //ValidateTerraformPlan(t, planOutput, "azurerm_storage_account")
 //}
-
