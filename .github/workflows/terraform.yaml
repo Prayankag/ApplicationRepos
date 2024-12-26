@@ -115,7 +115,7 @@ jobs:
         # Use default tfvars path if no environment is set
         if [ -z "${{ github.event.inputs.environment }}" ]; then
           echo "Environment is not set, using default tfvars file"
-          ENV_TFVARS="environments/default/terraform.tfvars"  # Default path if no environment is provided
+          ENV_TFVARS="environments/terraform.tfvars"  # Default path if no environment is provided
         else
           ENV_TFVARS="environments/${{ github.event.inputs.environment }}/terraform.tfvars"
         fi
