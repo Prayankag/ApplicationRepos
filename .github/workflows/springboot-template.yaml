@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'springboot/**'    ## #Monitor changes in 'springboot' folder
+      - 'springboot/**'    ####Monitor changes in 'springboot' folder
   workflow_dispatch:
     inputs:
       app-name:
