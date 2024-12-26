@@ -11,4 +11,4 @@ subnet_address_prefix = "10.0.1.0/24"
 vm_name               = "dev-vm"
 vm_size               = "Standard_DS1_v2"
 admin_username     = "adminuser"
-admin_password     = "MyP@ssw0rd123!"  # For security reasons, consider using secrets management
+admin_password     = "MyP@ssw0rd123!"  # For security reasons, consider using secrets managements
