@@ -107,14 +107,18 @@ jobs:
     - name: Terraform Plan
       run: |
         echo "Running Terraform Plan with environment-specific tfvars..."
-        if [ -z "${{ github.event.inputs.environment }}" ]; then
-          ENV_TFVARS="terraform/terraform.tfvars"  # Default path if no environment is provided
-          echo "No environment provided, using default tfvars file: ${ENV_TFVARS}"
-        else
-          ENV_TFVARS="terraform/environments/${{ github.event.inputs.environment }}/terraform.tfvars"
-          echo "Using environment-specific tfvars file: ${ENV_TFVARS}"
-        fi
-
+        
+        # if [ -z "${{ github.event.inputs.environment }}" ]; then
+        #   ENV_TFVARS="terraform/terraform.tfvars"  # Default path if no environment is provided
+        #   echo "No environment provided, using default tfvars file: ${ENV_TFVARS}"
+        # else
+        #   ENV_TFVARS="terraform/environments/${{ github.event.inputs.environment }}/terraform.tfvars"
+        #   echo "Using environment-specific tfvars file: ${ENV_TFVARS}"
+        # fi
+        
+        ENV_TFVARS="terraform/environments/${{ github.event.inputs.environment }}/terraform.tfvars"
+        echo "Using environment-specific tfvars file: ${ENV_TFVARS}"
+    
         # Plan with correct path to tfvars file
         terraform -chdir=${{ env.TF_WORKING_DIR }} plan -out=tfplan -var-file=${{ github.workspace }}/${ENV_TFVARS}
 
@@ -122,14 +126,18 @@ jobs:
     - name: Terraform Apply
       run: |
         echo "Applying Terraform Plan..."
-        if [ -z "${{ github.event.inputs.environment }}" ]; then
-          ENV_TFVARS="terraform/terraform.tfvars"  # Default path if no environment is provided
-          echo "No environment provided, using default tfvars file: ${ENV_TFVARS}"
-        else
-          ENV_TFVARS="terraform/environments/${{ github.event.inputs.environment }}/terraform.tfvars"
-          echo "Using environment-specific tfvars file: ${ENV_TFVARS}"
-        fi
-
+        
+        # if [ -z "${{ github.event.inputs.environment }}" ]; then
+        #   ENV_TFVARS="terraform/terraform.tfvars"  # Default path if no environment is provided
+        #   echo "No environment provided, using default tfvars file: ${ENV_TFVARS}"
+        # else
+        #   ENV_TFVARS="terraform/environments/${{ github.event.inputs.environment }}/terraform.tfvars"
+        #   echo "Using environment-specific tfvars file: ${ENV_TFVARS}"
+        # fi
+        
+        ENV_TFVARS="terraform/environments/${{ github.event.inputs.environment }}/terraform.tfvars"
+        echo "Using environment-specific tfvars file: ${ENV_TFVARS}"
+        
         # Apply with correct path to tfvars file
         terraform -chdir=${{ env.TF_WORKING_DIR }} apply -auto-approve -var-file=${{ github.workspace }}/${ENV_TFVARS}
 
