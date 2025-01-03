@@ -91,7 +91,7 @@ jobs:
       - name: Deploy to Dev Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ github.event.inputs.appname || secrets.AZURE_WEBAPP_NAME_DEV }}  # Use manual input or fall back to secret
+          appname: ${{ github.event.inputs.appname || secrets.AZURE_WEBAPP_NAME_DEV }}  # Use manual input or fall back to secret
           package: ./drop.zip  # Correct path to the downloaded zip file
 
       - name: Validate Dev Deployment
