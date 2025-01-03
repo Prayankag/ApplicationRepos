@@ -91,7 +91,7 @@ jobs:
       - name: Deploy to Dev Web App
         uses: azure/webapps-deploy@v2
         with:
-          appname: ${{ github.event.inputs.appname || secrets.AZURE_WEBAPP_NAME_DEV }}  # Use manual input or fall back to secret
+          app-name: ${{ github.event.inputs.appname || secrets.AZURE_WEBAPP_NAME_DEV }}  # Use manual input or fall back to secret
           package: ./drop.zip  # Correct path to the downloaded zip file
 
       - name: Validate Dev Deployment
@@ -111,11 +111,11 @@ jobs:
 
   deploy-to-staging:
     runs-on: ubuntu-latest
-    needs: build
-    if: ${{ always() }}
+    needs: deploy-to-dev
+    if: ${{ success() }}
     environment:
       name: staging
-      url: https://staging.example.com  # Optional: URL to the staging environment for notification
+      #url: https://staging.com  # Optional: URL to the staging environment for notification
 
     steps:
       - name: Checkout code
@@ -142,7 +142,7 @@ jobs:
       - name: Deploy to Staging Web App
         uses: azure/webapps-deploy@v2
         with:
-          appname: ${{ secrets.AZURE_STAGING_WEBAPP_NAME }}  # Use manual input or fall back to secret
+          app-name: ${{ secrets.AZURE_STAGING_WEBAPP_NAME }}  # Use manual input or fall back to secret
           package: ./drop.zip  # Correct path to the downloaded zip file
 
       - name: Validate Staging Deployment
@@ -162,11 +162,11 @@ jobs:
 
   deploy-to-production:
     runs-on: ubuntu-latest
-    needs: build
-    if: ${{ always() }}
+    needs: deploy-to-staging
+    if: ${{ success() }}
     environment:
       name: production
-      url: https://production.example.com  # Optional: URL to the production environment for notification
+      #url: https://production.com  # Optional: URL to the production environment for notification
 
     steps:
       - name: Checkout code
